@@ -1,15 +1,27 @@
 package chapter14
 
 // Node is a single node in a linked list.
-type Node[T any] struct {
+type Node[T comparable] struct {
 	Next *Node[T]
 	Data T
 }
 
+type Tree[T comparable] struct {
+	FirstNode *Node[T]
+}
+
+func NewLinkedList[T comparable](firstNode *Node[T]) *Tree[T] {
+	return &Tree[T]{
+		FirstNode: firstNode,
+	}
+}
+
 // NewListFromSlice creates a new linked list using a list of any items.
-func NewListFromSlice[T any](list []T) *Node[T] {
+func NewLinkedListFromSlice[T comparable](list []T) *Tree[T] {
 	if len(list) == 0 {
-		return &Node[T]{}
+		return &Tree[T]{
+			FirstNode: &Node[T]{},
+		}
 	}
 
 	start := &Node[T]{
@@ -24,11 +36,12 @@ func NewListFromSlice[T any](list []T) *Node[T] {
 	}
 
 	last.Data = list[len(list)-1]
-	return start
+	return &Tree[T]{FirstNode: start}
 }
 
 // Traverse creates a slice from the linked list.
-func (n *Node[T]) Traverse() []T {
+func (t *Tree[T]) Traverse() []T {
+	n := t.FirstNode
 	result := append([]T{}, n.Data)
 	node := n.Next
 	for node != nil {
@@ -39,9 +52,43 @@ func (n *Node[T]) Traverse() []T {
 	return result
 }
 
-func (n *Node[T]) Read(index int) *Node[T] {
+func (t *Tree[T]) Search(val T) int {
+	index := 0
+	curr := t.FirstNode
+	for curr != nil {
+		if curr.Data == val {
+			return index
+		}
+		curr = curr.Next
+		index++
+	}
+
+	return -1
+}
+
+func (t *Tree[T]) Insert(index int, val T) {
+	node := &Node[T]{
+		Data: val,
+	}
+	if index == 0 {
+		node.Next = t.FirstNode
+		t.FirstNode = node
+		return
+	}
+	currNode := t.FirstNode
+	currIndex := 0
+
+	for currIndex < index-1 {
+		currNode = currNode.Next
+		currIndex++
+	}
+	node.Next = currNode.Next
+	currNode.Next = node
+}
+
+func (t *Tree[T]) Read(index int) *Node[T] {
 	i := 0
-	result := n
+	result := t.FirstNode
 	for i < index {
 		result = result.Next
 		i++
