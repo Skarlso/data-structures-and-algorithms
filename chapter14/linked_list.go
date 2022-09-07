@@ -100,3 +100,45 @@ func (t *Tree[T]) Read(index int) *Node[T] {
 
 	return result
 }
+
+func (t *Tree[T]) Delete(index int) {
+	// Deleting the first item is easy.
+	if index == 0 {
+		t.FirstNode = t.FirstNode.Next
+		return
+	}
+
+	currNode := t.FirstNode
+	currIndex := 0
+	// We loop through the list to find the item we are looking for.
+	for currIndex < index-1 {
+		currNode = currNode.Next
+		currIndex++
+	}
+	// Save the next node after the one we will be deleting.
+	nodeAfterDeletedNode := currNode.Next.Next
+	// Update the link to the node to point to the next node leaving out the current node of the link.
+	currNode.Next = nodeAfterDeletedNode
+}
+
+func (t *Tree[T]) LastNode() *Node[T] {
+	last := t.FirstNode
+
+	for last.Next != nil {
+		last = last.Next
+	}
+	return last
+}
+
+func (t *Tree[T]) Reverse() {
+	var previousNode *Node[T]
+	currentNode := t.FirstNode
+
+	for currentNode != nil {
+		nextNode := currentNode.Next
+		currentNode.Next = previousNode
+		previousNode = currentNode
+		currentNode = nextNode
+	}
+	t.FirstNode = previousNode
+}

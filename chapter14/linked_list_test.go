@@ -81,3 +81,55 @@ func TestLinkedListInsert(t *testing.T) {
 		},
 	}, tree.FirstNode)
 }
+
+func TestDelete(t *testing.T) {
+	tree := NewLinkedList(&Node[int]{
+		Data: 1,
+		Next: &Node[int]{
+			Data: 2,
+			Next: &Node[int]{
+				Data: 3,
+			},
+		},
+	})
+
+	tree.Delete(1)
+	assert.Equal(t, &Node[int]{
+		Data: 1,
+		Next: &Node[int]{
+			Data: 3,
+		},
+	}, tree.FirstNode)
+}
+
+func TestLastNode(t *testing.T) {
+	tree := NewLinkedList(&Node[int]{
+		Data: 1,
+		Next: &Node[int]{
+			Data: 2,
+			Next: &Node[int]{
+				Data: 3,
+			},
+		},
+	})
+
+	last := tree.LastNode()
+	assert.Equal(t, &Node[int]{
+		Data: 3,
+	}, last)
+}
+
+func TestReverseList(t *testing.T) {
+	tree := NewLinkedList(&Node[int]{
+		Data: 1,
+		Next: &Node[int]{
+			Data: 2,
+			Next: &Node[int]{
+				Data: 3,
+			},
+		},
+	})
+	tree.Reverse()
+	last := tree.LastNode()
+	assert.Equal(t, 1, last.Data)
+}
