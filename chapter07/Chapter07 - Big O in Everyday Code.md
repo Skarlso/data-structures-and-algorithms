@@ -103,3 +103,4 @@ No loops, and the number of steps is constant. Therefor, O(1).
 
 ## Average Celsius Reading
 
+TODO: Finish this chapter.
